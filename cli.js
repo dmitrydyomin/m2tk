@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 require('dotenv/config');
-const { run } = require('./dist/index');
+const { run } = require('./dist/run');
 
 run();

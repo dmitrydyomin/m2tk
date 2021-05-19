@@ -1,9 +1,12 @@
 {
   "name": "m2tk",
-  "version": "1.0.4",
+  "version": "1.0.10",
   "description": "MySQL to TypeScript Knex adapter",
   "main": "dist/index.js",
-  "files": ["dist", "cli.js"],
+  "files": [
+    "dist",
+    "cli.js"
+  ],
   "types": "dist/index.d.ts",
   "bin": {
     "m2tk": "./cli.js"
@@ -24,6 +27,7 @@
   "dependencies": {
     "change-case": "^4.1.2",
     "dotenv": "^9.0.0",
+    "getopts": "^2.2.5",
     "knex": "^0.95.4",
     "mysql": "^2.18.1",
     "pluralize": "^8.0.0"

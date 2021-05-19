@@ -1,14 +1,15 @@
 import { pascalCase } from 'pascal-case';
 import { addSingularRule, singular } from 'pluralize';
+import { config } from './config';
 
 import { Column } from './db';
 
 addSingularRule('data', 'data');
 
 const mapTypes = (t: string) => {
-  // if (t === 'tinyint unsigned') {
-  //   return 'boolean';
-  // }
+  if (config.boolean && t.indexOf('tinyint') !== -1) {
+    return 'boolean';
+  }
   if (
     t.indexOf('int') !== -1 ||
     t.indexOf('decimal') !== -1 ||

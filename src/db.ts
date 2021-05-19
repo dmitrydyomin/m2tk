@@ -1,6 +1,9 @@
-import Knex from 'knex';
+import Knex, { Knex as KnexType } from 'knex';
+import path from 'path';
 
-export const db = Knex({
+const skipTables = ['knex_migrations', 'knex_migrations_lock'];
+
+let config: KnexType.Config = {
   client: 'mysql',
   connection: {
     host: process.env.DB_HOST || 'localhost',
@@ -10,7 +13,13 @@ export const db = Knex({
     password: process.env.DB_PASSWORD || 'password',
     charset: 'utf8mb4',
   },
-});
+};
+
+try {
+  config = require(path.join(process.cwd(), 'knexfile.js'));
+} catch (err) {}
+
+export const db = Knex(config);
 
 export interface Column {
   Field: string;
@@ -25,7 +34,7 @@ export const getTableNames = async () => {
   const tables: string[] = (await db.raw('SHOW TABLES'))[0].map(
     (t: any) => Object.values(t)[0]
   );
-  return tables;
+  return tables.filter((t) => !skipTables.includes(t));
 };
 
 export const getTableColumns = async (tableName: string) => {
