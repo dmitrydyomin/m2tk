@@ -1,6 +1,6 @@
 {
   "name": "m2tk",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "MySQL to TypeScript Knex adapter",
   "main": "dist/index.js",
   "files": [
