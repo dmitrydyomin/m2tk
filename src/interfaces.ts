@@ -35,7 +35,8 @@ const columnToProp = (c: Column) =>
 
 export const interfaceName = (tableName: string) => {
   const parts = tableName.split('_');
-  return pascalCase(parts.map(singular).join('_'));
+  const name = pascalCase(parts.map(singular).join('_'));
+  return `${config.prefix}${name}`;
 };
 
 export const getInterfaceForTable = (tableName: string, columns: Column[]) => {
