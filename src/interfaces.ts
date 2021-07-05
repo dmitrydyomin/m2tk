@@ -1,8 +1,8 @@
 import { pascalCase } from 'pascal-case';
 import { addSingularRule, singular } from 'pluralize';
-import { config } from './config';
 
 import { Column } from './db';
+import { config } from './config';
 
 addSingularRule('data', 'data');
 

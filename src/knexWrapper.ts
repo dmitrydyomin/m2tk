@@ -1,11 +1,12 @@
 import { camelCase } from 'camel-case';
 
+import { config } from './config';
 import { interfaceName } from './interfaces';
 
-export const generateKnexWrapper = (tables: string[]) => {
+export const generateKnexWrapper = (tables: string[], constructor = true) => {
   return (
-    `export class DB {
-  constructor(public knex: Knex) {}\n` +
+    `export class DB {\n` +
+  (config.constructor ? `  constructor(public knex: Knex) {}\n` : '  public knex: Knex;\n') +
     tables
       .map(
         (t) =>
