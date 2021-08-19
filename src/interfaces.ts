@@ -1,5 +1,5 @@
-import { pascalCase } from 'pascal-case';
 import { addSingularRule, singular } from 'pluralize';
+import { pascalCase } from 'pascal-case';
 
 import { Column } from './db';
 import { config } from './config';
@@ -20,6 +20,9 @@ const mapTypes = (t: string) => {
   }
   if (t.indexOf('char') !== -1 || t.indexOf('text') !== -1) {
     return 'string';
+  }
+  if (t.indexOf('enum') !== -1) {
+    return t.split(/[\(\)]/)[1].replace(/,/g, ' | ');
   }
   if (t.indexOf('date') !== -1 || t === 'timestamp') {
     return 'Date';
