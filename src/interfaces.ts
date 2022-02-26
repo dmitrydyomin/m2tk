@@ -27,6 +27,9 @@ const mapTypes = (t: string) => {
   if (t.indexOf('date') !== -1 || t === 'timestamp') {
     return 'Date';
   }
+  if (t === 'json') {
+    return 'any';
+  }
   if (t === 'time') {
     return 'string';
   }
