@@ -1,5 +1,7 @@
+import fs from 'fs';
 import Knex, { Knex as KnexType } from 'knex';
 import path from 'path';
+import requireFromString from 'require-from-string';
 
 const skipTables = ['knex_migrations', 'knex_migrations_lock'];
 
@@ -15,9 +17,20 @@ let config: KnexType.Config = {
   },
 };
 
+const configPath = path.join(process.cwd(), 'knexfile.js');
+
 try {
-  config = require(path.join(process.cwd(), 'knexfile.js'));
-} catch (err) {}
+  config = require(configPath);
+} catch (err: any) {
+  if (
+    err.code === 'ERR_REQUIRE_ESM' ||
+    err.message.includes(`Unexpected token 'export'`)
+  ) {
+    const content = fs.readFileSync(configPath, 'utf-8');
+    const cjs = content.replace(/export\s+default/, 'module.exports =');
+    config = requireFromString(cjs);
+  }
+}
 
 export const db = Knex(config);
 

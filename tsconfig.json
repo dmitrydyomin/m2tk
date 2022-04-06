@@ -5,15 +5,13 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
+    "module": "CommonJS",
     "outDir": "./dist",
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "strictPropertyInitialization": false,
-    "target": "es5",
-    "lib": [
-      "es2019"
-    ]
+    "noUnusedLocals": true,
+    "target": "es2021",
+    "lib": ["es2021"]
   }
 }

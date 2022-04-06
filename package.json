@@ -1,6 +1,6 @@
 {
   "name": "m2tk",
-  "version": "1.0.18",
+  "version": "1.0.24",
   "description": "MySQL to TypeScript Knex adapter",
   "main": "dist/index.js",
   "files": [
@@ -21,15 +21,17 @@
   "devDependencies": {
     "@types/node": "^17.0.21",
     "@types/pluralize": "^0.0.29",
+    "@types/require-from-string": "^1.2.1",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
-  "dependencies": {
-    "change-case": "^4.1.2",
-    "dotenv": "^16.0.0",
-    "getopts": "^2.3.0",
-    "knex": "^1.0.3",
-    "mysql": "^2.18.1",
-    "pluralize": "^8.0.0"
+  "peerDependencies": {
+    "change-case": "4.x",
+    "dotenv": "16.x",
+    "getopts": "2.x",
+    "knex": "1.x",
+    "mysql": "2.x",
+    "pluralize": "8.x",
+    "require-from-string": "2.x"
   }
 }
