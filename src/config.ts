@@ -10,5 +10,6 @@ const options = getopts(process.argv.slice(2), {
 export const config = {
   boolean: !!options.boolean,
   constructor: !options.noConstructor,
+  otherSchemas: options.otherSchemas,
   prefix: options.prefix || '',
 };

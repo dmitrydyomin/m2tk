@@ -39,16 +39,23 @@ const mapTypes = (t: string) => {
 const columnToProp = (c: Column) =>
   `${c.Field}: ${mapTypes(c.Type)}${c.Null === 'YES' ? ' | null' : ''};`;
 
-export const interfaceName = (tableName: string) => {
+export const interfaceName = (tableName: string, database?: string) => {
   const parts = tableName.split('_');
+  if (database) {
+    parts.unshift(database);
+  }
   const name = pascalCase(parts.map(singular).join('_'));
   return `${config.prefix}${name}`;
 };
 
-export const getInterfaceForTable = (tableName: string, columns: Column[]) => {
+export const getInterfaceForTable = (
+  tableName: string,
+  columns: Column[],
+  database?: string
+) => {
   const props = columns.map(columnToProp);
   return (
-    `export interface ${interfaceName(tableName)} {\n  ` +
+    `export interface ${interfaceName(tableName, database)} {\n  ` +
     props.join('\n  ') +
     `\n}\n`
   );
