@@ -1,5 +1,5 @@
 import { addSingularRule, singular } from 'pluralize';
-import { pascalCase } from 'pascal-case';
+import { pascalCase } from 'change-case';
 
 import { Column } from './db';
 import { config } from './config';
