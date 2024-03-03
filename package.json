@@ -1,11 +1,12 @@
 {
   "name": "m2tk",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "MySQL to TypeScript Knex adapter",
   "main": "dist/index.js",
   "files": [
     "dist",
-    "cli.js"
+    "cli.js",
+    "README.md"
   ],
   "types": "dist/index.d.ts",
   "bin": {
@@ -13,7 +14,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "ts-node -r dotenv/config src/index.ts"
+    "start": "ts-node -r dotenv/config src/index.ts",
+    "export": "rm -rf dist && npm run build && npm --no-git-tag-version version patch && npm publish"
   },
   "keywords": [],
   "author": "Dmitry Dyomin <dma01x@gmail.com>",

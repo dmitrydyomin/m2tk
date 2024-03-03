@@ -33,6 +33,9 @@ const mapTypes = (t: string) => {
   if (t === 'time') {
     return 'string';
   }
+  if (t === 'blob') {
+    return 'Buffer';
+  }
   return t;
 };
 
