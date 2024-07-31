@@ -24,7 +24,7 @@ const mapTypes = (t: string) => {
   if (t.indexOf('enum') !== -1) {
     return t.split(/[\(\)]/)[1].replace(/,/g, ' | ');
   }
-  if (t.indexOf('date') !== -1 || t === 'timestamp') {
+  if (t.indexOf('date') !== -1 || t.startsWith('timestamp')) {
     return 'Date';
   }
   if (t === 'json') {
@@ -35,6 +35,9 @@ const mapTypes = (t: string) => {
   }
   if (t === 'blob') {
     return 'Buffer';
+  }
+  if (t === 'boolean') {
+    return 'boolean';
   }
   return t;
 };
