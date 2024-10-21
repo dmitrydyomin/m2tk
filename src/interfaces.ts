@@ -1,8 +1,8 @@
-import { addSingularRule, singular } from 'pluralize';
 import { pascalCase } from 'change-case';
+import { addSingularRule, singular } from 'pluralize';
 
-import { Column } from './db';
 import { config } from './config';
+import { Column, ms } from './db';
 
 addSingularRule('data', 'data');
 
@@ -14,7 +14,7 @@ const mapTypes = (t: string) => {
     t.indexOf('int') !== -1 ||
     t.indexOf('decimal') !== -1 ||
     t.indexOf('double') !== -1 ||
-    t.indexOf('binary') !== -1
+    (t.indexOf('binary') !== -1 && !ms)
   ) {
     return 'number';
   }
@@ -38,6 +38,21 @@ const mapTypes = (t: string) => {
   }
   if (t === 'boolean') {
     return 'boolean';
+  }
+  if (t.includes('binary')) {
+    return 'Buffer';
+  }
+  if (t === 'real' || t === 'float') {
+    return 'number';
+  }
+  if (
+    t === 'xml' ||
+    t === 'money' ||
+    t === 'bit' ||
+    t === 'image' ||
+    t === 'uniqueidentifier'
+  ) {
+    return 'unknown';
   }
   return t;
 };
