@@ -155,7 +155,7 @@ async function getEnumColumns(tableName: string) {
     // (("checksumType" = ANY (ARRAY['CRC32'::text, 'CRC32C'::text, 'SHA1'::text, 'SHA256'::text])))
     const m = r.check_clause.match(/ARRAY\[(('[^']+'::text),?\s*)+\]/);
     if (m) {
-      const re = /'(\w+)'::text/g;
+      const re = /'([^']+)'::text/g;
       const options: string[] = [];
 
       while (true) {
