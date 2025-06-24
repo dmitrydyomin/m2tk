@@ -135,41 +135,31 @@ export const getTableColumns = async (tableName: string, database?: string) => {
 };
 
 async function getEnumColumns(tableName: string) {
-  const rows = await db('information_schema.constraint_column_usage as ccu')
-    .innerJoin(
-      'information_schema.check_constraints as cc',
-      'cc.constraint_name',
-      'ccu.constraint_name'
-    )
-    .where('cc.constraint_schema', pgSchema)
-    .where('ccu.table_schema', pgSchema)
-    .where('ccu.table_name', tableName)
-    .select<{ column_name: string; check_clause: string }[]>([
-      'column_name',
-      'check_clause',
-    ]);
+  const rows = await db('pg_enum AS e')
+    .innerJoin('pg_type AS t', 'e.enumtypid', 't.oid')
+    .innerJoin('pg_class AS c', function () {
+      this.onVal('c.relname', tableName);
+    })
+    .innerJoin('pg_attribute AS a', function () {
+      this.on('a.attrelid', 'c.oid').andOn('a.atttypid', 't.oid');
+    })
+    .select<{ column: string; option: string }[]>({
+      column: 'a.attname',
+      option: 'e.enumlabel',
+    });
 
-  const res: Record<string, string> = {};
-
-  rows.forEach((r) => {
-    // (("checksumType" = ANY (ARRAY['CRC32'::text, 'CRC32C'::text, 'SHA1'::text, 'SHA256'::text])))
-    const m = r.check_clause.match(/ARRAY\[(('[^']+'::text),?\s*)+\]/);
-    if (m) {
-      const re = /'([^']+)'::text/g;
-      const options: string[] = [];
-
-      while (true) {
-        const m1 = re.exec(m[0]);
-        if (!m1) {
-          break;
-        }
-        options.push(m1[1]);
-      }
-      if (options.length > 0) {
-        res[r.column_name] = `enum(${options.map((o) => `'${o}'`).join(',')})`;
-      }
+  const byColumn = rows.reduce<Record<string, string[]>>((all, r) => {
+    if (!all[r.column]) {
+      all[r.column] = [];
     }
-  });
+    all[r.column].push(r.option);
+    return all;
+  }, {});
 
-  return res;
+  return Object.fromEntries(
+    Object.entries(byColumn).map(([k, v]) => [
+      k,
+      `enum(${v.map((o) => `'${o}'`).join(',')})`,
+    ])
+  );
 }
