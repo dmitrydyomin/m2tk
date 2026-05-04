@@ -27,19 +27,24 @@ export const run = (config?: Knex.Config) =>
       tables.map(async (table) => ({
         table,
         cols: await getTableColumns(table.table, table.database),
-      }))
+      })),
     );
 
     const interfaces = tablesWithColumns
       .map(({ table, cols }) =>
-        getInterfaceForTable(table.table, cols, table.database)
+        getInterfaceForTable(
+          table.table,
+          cols,
+          table.database,
+          optsConfig.inserts,
+        ),
       )
       .join('\n');
 
     const wrapper = generateKnexWrapper(tables);
 
     console.log(
-      `import { Knex } from 'knex';\n\n` + interfaces + '\n' + wrapper
+      `import { Knex } from 'knex';\n\n` + interfaces + '\n' + wrapper,
     );
   })()
     .then(() => {

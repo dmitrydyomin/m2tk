@@ -60,6 +60,12 @@ const mapTypes = (t: string) => {
 const columnToProp = (c: Column) =>
   `${c.Field}: ${mapTypes(c.Type)}${c.Null === 'YES' ? ' | null' : ''};`;
 
+const optional = (c: Column) =>
+  c.Null === 'YES' || c.Default !== null || c.Extra === 'auto_increment';
+
+const columnToPropInsert = (c: Column) =>
+  `${c.Field}${optional(c) ? '?' : ''}: ${mapTypes(c.Type)}${c.Null === 'YES' ? ' | null' : ''};`;
+
 export const interfaceName = (tableName: string, database?: string) => {
   const parts = tableName.split('_');
   if (database) {
@@ -72,12 +78,22 @@ export const interfaceName = (tableName: string, database?: string) => {
 export const getInterfaceForTable = (
   tableName: string,
   columns: Column[],
-  database?: string
+  database?: string,
+  insert?: boolean,
 ) => {
   const props = columns.map(columnToProp);
-  return (
+
+  let table =
     `export interface ${interfaceName(tableName, database)} {\n  ` +
     props.join('\n  ') +
-    `\n}\n`
-  );
+    `\n}\n`;
+
+  if (insert) {
+    table +=
+      `\nexport interface ${interfaceName(tableName, database)}Insert {\n  ` +
+      columns.map(columnToPropInsert).join('\n  ') +
+      `\n}\n`;
+  }
+
+  return table;
 };

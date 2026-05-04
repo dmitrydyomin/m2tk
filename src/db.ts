@@ -57,7 +57,7 @@ export interface Column {
 export const getOtherDbNames = async () => {
   if (!pg) {
     const tables: string[] = (await db.raw('SHOW DATABASES'))[0].map(
-      (t: any) => Object.values(t)[0]
+      (t: any) => Object.values(t)[0],
     );
     return tables.filter((t) => !skipDbs.includes(t));
   }
@@ -93,7 +93,7 @@ export const getTableNames = async (dbName?: string) => {
 export const getTableColumns = async (tableName: string, database?: string) => {
   if (!pg && !ms) {
     const rows: [Column[], unknown] = (await db.raw(
-      `SHOW COLUMNS FROM ${database ? `\`${database}\`.` : ''}\`${tableName}\``
+      `SHOW COLUMNS FROM ${database ? `\`${database}\`.` : ''}\`${tableName}\``,
     )) as any;
 
     return rows[0];
@@ -117,7 +117,7 @@ export const getTableColumns = async (tableName: string, database?: string) => {
         Key: '',
         Default: null,
         Extra: null,
-      })
+      }),
     );
   }
 
@@ -160,6 +160,6 @@ async function getEnumColumns(tableName: string) {
     Object.entries(byColumn).map(([k, v]) => [
       k,
       `enum(${v.map((o) => `'${o}'`).join(',')})`,
-    ])
+    ]),
   );
 }
